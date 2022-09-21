@@ -1,23 +1,63 @@
-import logo from './logo.svg';
+import React, {useState} from "react";
 import './App.css';
+import Header from "./header";
+import Sidebar from "./sidebar";
+// import Contentcard from "./contentcard";
+import data from "./components/youtube/youtube/data.json";
+import ContentList from "./contentlist";
+import WatchScreen from "./watchscreen";
+
 
 function App() {
+    const [records,setRecords]=useState(data);
+    // console.log(records);
+    const [searchrslt,setSearchRslt]=useState("");
+    const [searchkey,setSearchkey]=useState("");
+
+    function handleSearch(searchkey){
+        setSearchkey(searchkey);
+        if(searchkey!=="") {
+            const newrecs = records.filter((item) => {
+                const s1 = searchkey.toLowerCase();
+                const r1 = item.videoName.toLowerCase();
+                return (s1 && r1.includes(s1));
+            });
+    setSearchRslt(newrecs);
+        }
+    else{
+        setSearchRslt(data);
+        }
+    }
+
+    const [playrecs, setPlayRecs] = useState("");
+
+function playVideo(vId){
+      const vfile = records.filter((item)=>{
+       return item.id === vId ;
+             }) ;
+      // console.log(vfile);
+      setPlayRecs(vfile);
+
+
+}
+
+
+
   return (
+
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+          <Header sKey={searchkey} searchfunc={handleSearch}/>
+        {
+            (playrecs.length<1) ?
+                ( <main>
+                <div className="side-bar"><Sidebar/></div>
+                <div className="content"><ContentList apprecs={searchkey.length < 1 ? records : searchrslt}
+                                                      appWatch={playVideo}/></div>
+            </main> ) : (<main>
+                    <WatchScreen vdata={playrecs} />
+            </main>)
+        }
     </div>
   );
 }
