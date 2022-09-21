@@ -2,8 +2,7 @@ import React, {useState} from "react";
 import './App.css';
 import Header from "./header";
 import Sidebar from "./sidebar";
-// import Contentcard from "./contentcard";
-import data from "./components/youtube/youtube/data.json";
+import data from "./data.json";
 import ContentList from "./contentlist";
 import WatchScreen from "./watchscreen";
 
